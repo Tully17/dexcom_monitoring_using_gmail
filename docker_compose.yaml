@@ -1,0 +1,93 @@
+services:
+
+  dexcom-monitor:
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: dexcom-monitor_email
+
+    restart: unless-stopped
+
+    environment:
+
+      # ======================================================
+      # DEXCOM
+      # ======================================================
+
+      DEXCOM_USERNAME: "${DEXCOM_USERNAME}"
+      DEXCOM_PASSWORD: "${DEXCOM_PASSWORD}"
+
+      # US Dexcom accounts use "us".
+      # Change to "ous" if the account is outside the US.
+      DEXCOM_REGION: "${DEXCOM_REGION:-us}"
+
+      # ======================================================
+      # EMAIL ALERTING
+      # ======================================================
+
+      SMTP_SERVER: "${SMTP_SERVER}"
+      SMTP_PORT: "${SMTP_PORT}"
+      
+      SMTP_USERNAME: "${SMTP_USERNAME}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
+      
+      EMAIL_FROM: "${EMAIL_FROM}"
+      EMAIL_TO: "${EMAIL_TO}"
+
+      # ======================================================
+      # TRUE NAME
+      # ======================================================
+
+      TRUE_NAME: "${TRUE_NAME}"
+
+      # ======================================================
+      # MONITORING
+      # ======================================================
+
+      # Time zone used for the 7 AM - 4 PM schedule.
+      #
+      # Eastern Time:
+      TZ: "America/New_York"
+
+      # Poll Dexcom every 5 minutes.
+      POLL_INTERVAL_SECONDS: "300"
+
+      # ======================================================
+      # ALERT THRESHOLDS
+      # ======================================================
+
+      URGENT_LOW_ALERT: "55"
+      LOW_ALERT: "70"
+      HIGH_ALERT: "250"
+
+      # Data older than this is considered stale.
+      STALE_AFTER_MINUTES: "20"
+
+      # ======================================================
+      # WORK HOURS
+      # ======================================================
+
+      WORK_START_HOUR: "7"
+      WORK_END_HOUR: "16"
+
+    volumes:
+
+      # Persistent application logs
+      - ./data/logs:/data/logs
+
+    healthcheck:
+
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import os; print('healthy')"
+        ]
+
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
