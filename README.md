@@ -4,6 +4,8 @@ A small Docker application that checks Dexcom Share for glucose readings and ema
 
 **Important:** This is an unofficial, supplemental tool. It is **not** a medical device or a substitute for the Dexcom G7 app, Dexcom Follow, their official alerts, or an emergency response plan. Email and internet delivery can be delayed or fail. Do not rely on it as the only way to detect urgent glucose events.
 
+This project was made using chatgpt.  I am not as well versed with Python, and needed the script to work properly.
+
 ## What you'll need
 
 - A working Dexcom account with readings available through **Dexcom Share**.
